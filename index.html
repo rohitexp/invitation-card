@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>💍 Wedding Invitation</title>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;family=Cormorant+Garamond:wght@300;400;600;700&amp;family=Dancing+Script:wght@700&amp;family=Cinzel:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;family=Cormorant+Garamond:wght@300;400;600;700&amp;family=Dancing+Script:wght@700&amp;family=Cinzel:wght@400;600;700&amp;family=Noto+Serif+Devanagari:wght@400;600;700&amp;family=Noto+Serif+Bengali:wght@400;600;700&amp;display=swap" rel="stylesheet" />
 <style>
 /* ================= RESET ================= */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -23,6 +23,45 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
+}
+
+/* ================= LANGUAGE SWITCHER ================= */
+.lang-switcher{
+  position:fixed;
+  top:18px;
+  left:18px;
+  z-index:1002;
+  display:flex;
+  gap:6px;
+  background:rgba(255,248,225,.95);
+  backdrop-filter:blur(8px);
+  border:2px solid #d4af37;
+  border-radius:50px;
+  padding:5px;
+  box-shadow:0 8px 25px rgba(0,0,0,.35),0 0 20px rgba(212,175,55,.3);
+}
+.lang-btn{
+  font-family:'Cinzel',serif;
+  font-size:.8rem;
+  font-weight:700;
+  letter-spacing:1px;
+  color:#8b0000;
+  background:transparent;
+  border:none;
+  padding:8px 14px;
+  border-radius:40px;
+  cursor:pointer;
+  transition:.3s;
+  white-space:nowrap;
+}
+.lang-btn:hover{
+  background:rgba(212,175,55,.25);
+  transform:translateY(-1px);
+}
+.lang-btn.active{
+  background:linear-gradient(135deg,#8b0000,#b8860b);
+  color:#fff8e1;
+  box-shadow:0 4px 12px rgba(139,0,0,.4);
 }
 
 /* ================= FALLING ROSE PETALS ================= */
@@ -530,7 +569,7 @@ body{
 }
 .blessing span{display:block;font-size:2rem;margin-bottom:6px}
 
-/* ================= AWAITING SECTION (Last) ================= */
+/* ================= AWAITING SECTION ================= */
 .awaiting-section{
   display:flex;
   align-items:center;
@@ -592,6 +631,37 @@ body{
   100%{transform:translateY(110vh) rotate(720deg);opacity:0}
 }
 
+/* ================= HINDI & BENGALI FONT ================= */
+body.lang-hi .shloka-line,
+body.lang-hi .shloka-line.main,
+body.lang-hi .invite-line,
+body.lang-hi .invite-line.with,
+body.lang-hi .events-title,
+body.lang-hi .event-name,
+body.lang-hi .venue-title,
+body.lang-hi .venue-text,
+body.lang-hi .cd-lbl,
+body.lang-hi .blessing,
+body.lang-hi .map-btn,
+body.lang-hi .lang-btn{
+  font-family:'Noto Serif Devanagari','Cinzel',serif;
+}
+
+body.lang-bn .shloka-line,
+body.lang-bn .shloka-line.main,
+body.lang-bn .invite-line,
+body.lang-bn .invite-line.with,
+body.lang-bn .events-title,
+body.lang-bn .event-name,
+body.lang-bn .venue-title,
+body.lang-bn .venue-text,
+body.lang-bn .cd-lbl,
+body.lang-bn .blessing,
+body.lang-bn .map-btn,
+body.lang-bn .lang-btn{
+  font-family:'Noto Serif Bengali','Cinzel',serif;
+}
+
 /* ================= RESPONSIVE ================= */
 @media(max-width:820px){
   .grand-card{padding:45px 25px 55px}
@@ -605,6 +675,8 @@ body{
   .invite-hosts{font-size:1.4rem}
   .invite-line.big{font-size:1.6rem}
   .awaiting-text{font-size:1.7rem}
+  .lang-switcher{top:14px;left:14px;padding:4px}
+  .lang-btn{font-size:.7rem;padding:6px 10px}
 }
 @media(max-width:480px){
   body{padding:12px}
@@ -635,10 +707,20 @@ body{
   .envelope-seal{width:55px;height:55px;font-size:1.4rem}
   .tap-hint{font-size:1.1rem}
   .map-embed iframe{height:180px}
+  .lang-switcher{top:10px;left:10px;padding:3px;gap:3px}
+  .lang-btn{font-size:.6rem;padding:5px 8px;letter-spacing:0}
+  .sound-btn{width:44px;height:44px;font-size:1.2rem;top:12px;right:12px}
 }
 </style>
 </head>
 <body>
+
+<!-- ================= LANGUAGE SWITCHER ================= -->
+<div class="lang-switcher" id="langSwitcher">
+  <button class="lang-btn active" data-lang="en">English</button>
+  <button class="lang-btn" data-lang="hi">हिंदी</button>
+  <button class="lang-btn" data-lang="bn">বাংলা</button>
+</div>
 
 <!-- ================= ROSE PETALS ================= -->
 <div class="petals-container" id="petals"></div>
@@ -659,11 +741,11 @@ body{
 
       <div class="env-names">
         <div class="env-name top">
-          <div class="env-label">FROM</div>
+          <div class="env-label" data-i18n="envFrom">FROM</div>
           <span id="senderName">Sourav</span>
         </div>
         <div class="env-name">
-          <div class="env-label">TO</div>
+          <div class="env-label" data-i18n="envTo">TO</div>
           <span id="recipientName">Guest</span>
         </div>
       </div>
@@ -671,7 +753,7 @@ body{
 
   </div>
 
-  <div class="tap-hint">✨ Tap the letter to open ✨</div>
+  <div class="tap-hint" data-i18n="tapHint">✨ Tap the letter to open ✨</div>
 </div>
 
 <!-- ================= GRAND CARD ================= -->
@@ -695,16 +777,16 @@ body{
     <div class="invite-hosts">
       Smt. Shila Rani Pandey &amp; Shri Jitendra Nath Pandey
     </div>
-    <div class="invite-line">
+    <div class="invite-line" data-i18n="inviteLine1">
       invite you to celebrate the auspicious union
     </div>
-    <div class="invite-line">
+    <div class="invite-line" data-i18n="inviteLine2">
       of our beloved son
     </div>
     <div class="invite-line big">Sourav Pandey</div>
-    <div class="invite-line with">with</div>
+    <div class="invite-line with" data-i18n="withText">with</div>
     <div class="invite-line big">Prachi Pandey</div>
-    <div class="invite-parents">
+    <div class="invite-parents" data-i18n="brideParents">
       (D/o Mrs. Jyoti Pandey &amp; Mr. Bablu Pandey)
     </div>
   </div>
@@ -716,47 +798,47 @@ body{
   </div>
 
   <div class="events-wrap">
-    <h2 class="events-title">WEDDING EVENTS</h2>
+    <h2 class="events-title" data-i18n="eventsTitle">WEDDING EVENTS</h2>
 
     <div class="events-grid">
 
       <div class="event-card">
         <div class="event-icon">🌼</div>
-        <div class="event-name">HALDI</div>
+        <div class="event-name" data-i18n="haldiName">HALDI</div>
         <div class="event-date">16</div>
-        <div class="event-month">November</div>
-        <div class="event-day">Sunday</div>
-        <div class="event-time">🕐 From 12:00 PM onwards</div>
+        <div class="event-month" data-i18n="monthNov">November</div>
+        <div class="event-day" data-i18n="daySunday">Sunday</div>
+        <div class="event-time" data-i18n="haldiTime">🕐 From 12:00 PM onwards</div>
       </div>
 
       <div class="event-card">
         <div class="event-icon">💍</div>
-        <div class="event-name">WEDDING</div>
+        <div class="event-name" data-i18n="weddingName">WEDDING</div>
         <div class="event-date">17</div>
-        <div class="event-month">November</div>
-        <div class="event-day">Monday</div>
-        <div class="event-time">🕐 At the auspicious muhurat</div>
+        <div class="event-month" data-i18n="monthNov">November</div>
+        <div class="event-day" data-i18n="dayMonday">Monday</div>
+        <div class="event-time" data-i18n="weddingTime">🕐 At the auspicious muhurat</div>
       </div>
 
       <div class="event-card">
         <div class="event-icon">🎉</div>
-        <div class="event-name">RECEPTION</div>
+        <div class="event-name" data-i18n="receptionName">RECEPTION</div>
         <div class="event-date">19</div>
-        <div class="event-month">November</div>
-        <div class="event-day">Wednesday</div>
-        <div class="event-time">🕐 From 7:00 PM onwards</div>
+        <div class="event-month" data-i18n="monthNov">November</div>
+        <div class="event-day" data-i18n="dayWednesday">Wednesday</div>
+        <div class="event-time" data-i18n="receptionTime">🕐 From 7:00 PM onwards</div>
       </div>
 
     </div>
   </div>
 
   <div class="venue-box">
-    <div class="venue-title">📍 VENUE</div>
+    <div class="venue-title" data-i18n="venueTitle">📍 VENUE</div>
     <div class="venue-text">
-      <b>Village — Rudra, Post — Chirka</b><br>
-      District — Purulia, West Bengal — 723103<br>
+      <b data-i18n="venueLine1">Village — Rudra, Post — Chirka</b><br>
+      <span data-i18n="venueLine2">District — Purulia, West Bengal — 723103</span><br>
       <small>📍 23.404418° N, 86.253292° E</small><br>
-      <small>(All ceremonies will be held here)</small>
+      <small data-i18n="venueNote">(All ceremonies will be held here)</small>
     </div>
 
     <!-- Live Google Map -->
@@ -770,21 +852,21 @@ body{
     </div>
 
     <a class="map-btn" href="https://www.google.com/maps?q=23.404418,86.253292" target="_blank">
-      🗺️ Open in Google Maps
+      <span data-i18n="mapBtn">🗺️ Open in Google Maps</span>
     </a>
   </div>
 
   <div class="countdown-wrap">
-    <div class="countdown-title">✨ Countdown to the Wedding ✨</div>
+    <div class="countdown-title" data-i18n="countdownTitle">✨ Countdown to the Wedding ✨</div>
     <div class="countdown-grid">
-      <div class="cd-box"><div class="cd-num" id="cd-d">00</div><div class="cd-lbl">Days</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-lbl">Hours</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-lbl">Minutes</div></div>
-      <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl">Seconds</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-d">00</div><div class="cd-lbl" data-i18n="days">Days</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-lbl" data-i18n="hours">Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-lbl" data-i18n="minutes">Minutes</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl" data-i18n="seconds">Seconds</div></div>
     </div>
   </div>
 
-  <div class="blessing">
+  <div class="blessing" data-i18n-html="blessingText">
     <span>🙏</span>
     "Your presence is our greatest blessing.<br>
     Please join us with your family and shower your love &amp; blessings on the newly-weds."
@@ -792,7 +874,7 @@ body{
 
   <div class="awaiting-section">
     <div class="awaiting-line"></div>
-    <div class="awaiting-text">Awaiting Pandey Family</div>
+    <div class="awaiting-text" data-i18n="awaitingText">Awaiting Pandey Family</div>
     <div class="awaiting-line"></div>
   </div>
 
@@ -810,12 +892,162 @@ body{
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
 
-  /* ---------- URL PARAMETERS ---------- */
+  /* ==================================================
+     TRANSLATIONS
+     ================================================== */
+  const translations = {
+    en: {
+      envFrom: "FROM",
+      envTo: "TO",
+      tapHint: "✨ Tap the letter to open ✨",
+      inviteLine1: "invite you to celebrate the auspicious union",
+      inviteLine2: "of our beloved son",
+      withText: "with",
+      brideParents: "(D/o Mrs. Jyoti Pandey & Mr. Bablu Pandey)",
+      eventsTitle: "WEDDING EVENTS",
+      haldiName: "HALDI",
+      weddingName: "WEDDING",
+      receptionName: "RECEPTION",
+      monthNov: "November",
+      daySunday: "Sunday",
+      dayMonday: "Monday",
+      dayWednesday: "Wednesday",
+      haldiTime: "🕐 From 12:00 PM onwards",
+      weddingTime: "🕐 At the auspicious muhurat",
+      receptionTime: "🕐 From 7:00 PM onwards",
+      venueTitle: "📍 VENUE",
+      venueLine1: "Village — Rudra, Post — Chirka",
+      venueLine2: "District — Purulia, West Bengal — 723103",
+      venueNote: "(All ceremonies will be held here)",
+      mapBtn: "🗺️ Open in Google Maps",
+      countdownTitle: "✨ Countdown to the Wedding ✨",
+      days: "Days",
+      hours: "Hours",
+      minutes: "Minutes",
+      seconds: "Seconds",
+      blessingText: '<span>🙏</span>"Your presence is our greatest blessing.<br>Please join us with your family and shower your love &amp; blessings on the newly-weds."',
+      awaitingText: "Awaiting Pandey Family"
+    },
+    hi: {
+      envFrom: "प्रेषक",
+      envTo: "प्राप्तकर्ता",
+      tapHint: "✨ पत्र खोलने के लिए टैप करें ✨",
+      inviteLine1: "आपको सादर आमंत्रित करते हैं",
+      inviteLine2: "अपने प्रिय पुत्र के शुभ विवाह पर",
+      withText: "के साथ",
+      brideParents: "(सुश्री ज्योति पांडेय एवं श्री बबलू पांडेय की सुपुत्री)",
+      eventsTitle: "विवाह कार्यक्रम",
+      haldiName: "हल्दी",
+      weddingName: "विवाह",
+      receptionName: "प्रीतिभोज",
+      monthNov: "नवंबर",
+      daySunday: "रविवार",
+      dayMonday: "सोमवार",
+      dayWednesday: "बुधवार",
+      haldiTime: "🕐 दोपहर 12:00 बजे से",
+      weddingTime: "🕐 शुभ मुहूर्त में",
+      receptionTime: "🕐 शाम 7:00 बजे से",
+      venueTitle: "📍 स्थान",
+      venueLine1: "गाँव — रुद्रा, पोस्ट — चिरका",
+      venueLine2: "जिला — पुरुलिया, पश्चिम बंगाल — 723103",
+      venueNote: "(सभी कार्यक्रम यहीं आयोजित होंगे)",
+      mapBtn: "🗺️ Google Maps में देखें",
+      countdownTitle: "✨ विवाह की प्रतीक्षा ✨",
+      days: "दिन",
+      hours: "घंटे",
+      minutes: "मिनट",
+      seconds: "सेकंड",
+      blessingText: '<span>🙏</span>"आपकी उपस्थिति हमारा सबसे बड़ा आशीर्वाद है।<br>कृपया परिवार सहित पधारकर नव-दंपत्ति को शुभ आशीर्वाद प्रदान करें।"',
+      awaitingText: "प्रतीक्षारत पांडेय परिवार"
+    },
+    bn: {
+      envFrom: "প্রেরক",
+      envTo: "প্রাপক",
+      tapHint: "✨ চিঠি খুলতে ট্যাপ করুন ✨",
+      inviteLine1: "আপনাকে সাদরে আমন্ত্রণ জানাচ্ছি",
+      inviteLine2: "আমাদের প্রিয় পুত্রের শুভ বিবাহ উপলক্ষে",
+      withText: "এর সাথে",
+      brideParents: "(শ্রীমতী জ্যোতি পাণ্ডে ও শ্রী ববলু পাণ্ডের কন্যা)",
+      eventsTitle: "বিবাহ অনুষ্ঠান",
+      haldiName: "হলুদ",
+      weddingName: "বিবাহ",
+      receptionName: "প্রীতিভোজ",
+      monthNov: "নভেম্বর",
+      daySunday: "রবিবার",
+      dayMonday: "সোমবার",
+      dayWednesday: "বুধবার",
+      haldiTime: "🕐 দুপুর 12:00 টা থেকে",
+      weddingTime: "🕐 শুভ লগ্নে",
+      receptionTime: "🕐 সন্ধ্যা 7:00 টা থেকে",
+      venueTitle: "📍 স্থান",
+      venueLine1: "গ্রাম — রুদ্র, ডাক — চিরকা",
+      venueLine2: "জেলা — পুরুলিয়া, পশ্চিমবঙ্গ — 723103",
+      venueNote: "(সমস্ত অনুষ্ঠান এখানেই অনুষ্ঠিত হবে)",
+      mapBtn: "🗺️ Google Maps এ দেখুন",
+      countdownTitle: "✨ বিবাহের কাউন্টডাউন ✨",
+      days: "দিন",
+      hours: "ঘন্টা",
+      minutes: "মিনিট",
+      seconds: "সেকেন্ড",
+      blessingText: '<span>🙏</span>"আপনার উপস্থিতিই আমাদের সবচেয়ে বড় আশীর্বাদ।<br>অনুগ্রহ করে পরিবারসহ উপস্থিত হয়ে নবদম্পতিকে আশীর্বাদ করুন।"',
+      awaitingText: "প্রতীক্ষায় পাণ্ডে পরিবার"
+    }
+  };
+
+  /* ==================================================
+     LANGUAGE SWITCHER
+     ================================================== */
+  function setLanguage(lang){
+    // Update data-i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      if(translations[lang] && translations[lang][key]){
+        el.textContent = translations[lang][key];
+      }
+    });
+
+    // Update data-i18n-html elements (with HTML inside)
+    document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+      const key = el.getAttribute('data-i18n-html');
+      if(translations[lang] && translations[lang][key]){
+        el.innerHTML = translations[lang][key];
+      }
+    });
+
+    // Update body class for font
+    document.body.classList.remove('lang-en','lang-hi','lang-bn');
+    document.body.classList.add('lang-' + lang);
+
+    // Update active button
+    document.querySelectorAll('.lang-btn').forEach(b=>{
+      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    });
+
+    // Save to localStorage
+    localStorage.setItem('invitationLang', lang);
+
+    // Update html lang attribute
+    document.documentElement.lang = lang;
+  }
+
+  // Attach click handlers
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      setLanguage(btn.getAttribute('data-lang'));
+    });
+  });
+
+  // Load saved language or default to English
+  const savedLang = localStorage.getItem('invitationLang') || 'en';
+  setLanguage(savedLang);
+
+  /* ==================================================
+     URL PARAMETERS
+     ================================================== */
   const params = new URLSearchParams(window.location.search);
   const urlFrom = params.get('from');
   const urlTo = params.get('to');
 
-  /* ---------- DEFAULT NAMES ---------- */
   const DEFAULT_FROM = "Sourav";
   const DEFAULT_TO = "Guest";
 
@@ -825,7 +1057,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   senderName.textContent = urlFrom ? decodeURIComponent(urlFrom) : DEFAULT_FROM;
   recipientName.textContent = urlTo ? decodeURIComponent(urlTo) : DEFAULT_TO;
 
-  /* ---------- ROSE PETALS ---------- */
+  /* ==================================================
+     ROSE PETALS
+     ================================================== */
   const petals=document.getElementById('petals');
   function dropPetal(){
     const p=document.createElement('div');
@@ -839,7 +1073,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   setInterval(dropPetal,400);
 
-  /* ---------- FLOATING DIYAS & SPARKLES ---------- */
+  /* ==================================================
+     FLOATING DIYAS & SPARKLES
+     ================================================== */
   const bg=document.getElementById('diyasBg');
   const icons=['🪔','✨','🌼','🌸','💛','⭐','💫','🌺','🕉️','🎊'];
   for(let i=0;i<30;i++){
@@ -853,7 +1089,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     bg.appendChild(el);
   }
 
-  /* ---------- CONFETTI ---------- */
+  /* ==================================================
+     CONFETTI
+     ================================================== */
   function confetti(){
     const box=document.getElementById('confettiBurst');
     const colors=['#d4af37','#b8860b','#ffd700','#fff2b0','#ff8f00','#c9184a','#ff8fa3','#8b0000'];
@@ -873,7 +1111,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     setTimeout(()=>box.innerHTML='',7000);
   }
 
-  /* ---------- ENVELOPE OPEN ---------- */
+  /* ==================================================
+     ENVELOPE OPEN
+     ================================================== */
   const envelopeScreen=document.getElementById('envelopeScreen');
   const envelopeWrapper=document.getElementById('envelopeWrapper');
   const grandCard=document.getElementById('grandCard');
@@ -888,7 +1128,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     },1300);
   });
 
-  /* ---------- COUNTDOWN ---------- */
+  /* ==================================================
+     COUNTDOWN
+     ================================================== */
   function getWeddingDate(){
     const now=new Date();
     let year=now.getFullYear();
@@ -912,7 +1154,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   tick();
   setInterval(tick,1000);
 
-  /* ---------- SOUND CONTROL ---------- */
+  /* ==================================================
+     SOUND CONTROL
+     ================================================== */
   const bgMusic=document.getElementById('bgMusic');
   const soundBtn=document.getElementById('soundBtn');
   let playing=false;
@@ -924,7 +1168,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     else{bgMusic.play().then(()=>{playing=true;soundBtn.textContent='🔊';}).catch(()=>{});}
   });
 
-  /* ---------- CLICK CARD FOR CONFETTI ---------- */
+  /* ==================================================
+     CLICK CARD FOR CONFETTI
+     ================================================== */
   grandCard.addEventListener('click',e=>{
     if(e.target.tagName!=='A' && e.target.tagName!=='IFRAME') confetti();
   });
