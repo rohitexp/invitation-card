@@ -736,9 +736,10 @@ body{
     <div class="venue-text">
       <b>Village — Rudra, Post — Chirka</b><br>
       District — Purulia, West Bengal — 723103<br>
+      <small>📍 23.40435° N, 86.25340° E</small><br>
       <small>(All ceremonies will be held here)</small>
     </div>
-    <a class="map-btn" href="https://maps.google.com/?q=Rudra+Chirka+Purulia+723103" target="_blank">
+    <a class="map-btn" href="https://www.google.com/maps?q=23.40435,86.25340" target="_blank">
       🗺️ View on Google Maps
     </a>
   </div>
@@ -785,13 +786,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   const urlTo = params.get('to');
 
   /* ---------- DEFAULT NAMES ---------- */
-  const DEFAULT_FROM = "Sourav";   // 👈 apna naam yahan default rakho
-  const DEFAULT_TO = "Guest";       // 👈 default recipient
+  const DEFAULT_FROM = "Sourav";
+  const DEFAULT_TO = "Guest";
 
   const senderName = document.getElementById('senderName');
   const recipientName = document.getElementById('recipientName');
 
-  // Set names from URL or default
   senderName.textContent = urlFrom ? decodeURIComponent(urlFrom) : DEFAULT_FROM;
   recipientName.textContent = urlTo ? decodeURIComponent(urlTo) : DEFAULT_TO;
 
